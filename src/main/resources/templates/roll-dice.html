@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Roll-Dice</title>
+</head>
+<body>
+<h1>This is the roll dice page. Click to guess the right number.</h1>
+
+<div th:each="guess : ${#numbers.sequence(1, 10)}">
+    <a th:href="@{'/roll-dice/result/'+ ${guess}}" th:text="${guess}" ></a>
+</div>
+
+<p>You guessed: <span th:text="${guess}"></span></p>
+<p th:if="${win}">You guessed correct.</p>
+
+<p>The correct answer was: <span th:text="${answer}"></span></p>
+
+</body>
+</html>

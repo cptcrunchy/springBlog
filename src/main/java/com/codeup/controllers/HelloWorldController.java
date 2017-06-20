@@ -8,10 +8,7 @@ public class HelloWorldController
 {
 
     @GetMapping("/hello")
-    @ResponseBody
-    public String hello() {
-        return "Hello world!";
-    }
+    public String hello() {return "Hello";}
 
     @GetMapping("/hello/{name}/{lastName}")
     @ResponseBody
