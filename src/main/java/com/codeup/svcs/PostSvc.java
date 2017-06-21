@@ -8,7 +8,8 @@ import java.util.List;
 
 @Service("postSvc")
 public class PostSvc {
-    private List<Post> posts;
+
+    private List<Post> posts = new ArrayList<>();
 
     public PostSvc(){
         createPosts();
@@ -27,10 +28,16 @@ public class PostSvc {
     public Post findOne(long id) {
         return posts.get((int)(id - 1));
     }
+    private void createPost(String title, String body) {
+        save(new Post(title, body));
+    }
 
     private void createPosts() {
-        posts = new ArrayList<>();
-        save(new Post(1,"Help Wanted", "Position details"));
+        save(new Post("Help Wanted", "Position details"));
+        save(new Post("Help Wanted", "Position details"));
+        save(new Post("Help Wanted", "Position details"));
+        save(new Post("Help Wanted", "Position details"));
+        save(new Post("Help Wanted", "Position details"));
 
     }
 

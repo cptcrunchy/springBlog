@@ -21,11 +21,10 @@ public class AdsController {
     }
 
     @GetMapping("/ads")
-    @ResponseBody
     public String index(Model model) {
         List<Ad> ads = adsDao.findAll();
         model.addAttribute("ads", ads);
-        return "ads index page";
+        return "ads/index";
     }
 
     @GetMapping("/ads/{id}")
