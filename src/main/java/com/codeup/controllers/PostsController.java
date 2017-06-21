@@ -4,11 +4,8 @@ import com.codeup.svcs.PostSvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import com.codeup.models.Post;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class PostsController {
@@ -16,6 +13,21 @@ public class PostsController {
 
     @Autowired
     public PostsController(PostSvc postsDao) { this.postsDao = postsDao;}
+
+
+    @GetMapping("/posts/create")
+    public String showPostForm(Model model) {
+        model.addAttribute("post", new Post());
+        return "posts/create";
+    }
+
+    @PostMapping("/posts/create")
+    public String savePost(@ModelAttribute Post post, Model model) {
+        postsDao.save(post);
+        model.addAttribute("post", post);
+        return "redirect:/posts";
+    }
+
 
 
     @GetMapping("/posts")
@@ -30,5 +42,12 @@ public class PostsController {
         model.addAttribute("post", postsDao.findOne(id));
         return "posts/show";
     }
+
+    @GetMapping("/posts/{id}/edit")
+    public String editPost(@PathVariable long id, Model model) {
+        model.addAttribute("post", postsDao.findOne(id));
+        return "posts/edit";
+    }
+
 
 }

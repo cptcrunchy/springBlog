@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments :: head('Create New Blog Post')">
+    <meta charset="UTF-8" />
+    <title>New Blog Post</title>
+</head>
+<body>
+<nav th:replace="fragments :: my-navbar"></nav>
+<form
+  action="/posts/create"
+  method="post"
+  th:object="${post}"
+  th:include="fragments :: form"
+
+>
+</form>
+</body>
+</html>

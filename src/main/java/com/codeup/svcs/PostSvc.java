@@ -28,11 +28,13 @@ public class PostSvc {
     public Post findOne(long id) {
         return posts.get((int)(id - 1));
     }
+
     private void createPost(String title, String body) {
         save(new Post(title, body));
     }
 
     private void createPosts() {
+
         save(new Post("Help Wanted", "Position details"));
         save(new Post("Help Wanted", "Position details"));
         save(new Post("Help Wanted", "Position details"));
