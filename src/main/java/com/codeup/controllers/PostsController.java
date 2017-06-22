@@ -14,7 +14,9 @@ public class PostsController {
     private final PostSvc postSvc;
 
     @Autowired
-    public PostsController(PostSvc postSvc) { this.postSvc = postSvc;}
+    public PostsController(PostSvc postSvc) {
+        this.postSvc = postSvc;
+    }
 
     @GetMapping("/posts")
     public String viewAll(Model model) {
@@ -24,7 +26,7 @@ public class PostsController {
     }
 
     @GetMapping("/posts/{id}")
-    public String show(@PathVariable long id, Model model) {
+    public String viewIndividualPost(@PathVariable long id, Model model) {
         Post post = postSvc.findOne(id);
         model.addAttribute("post", post);
         return "posts/show";
@@ -45,20 +47,21 @@ public class PostsController {
 
     @GetMapping("/posts/edit/{id}")
     public String showEditForm(@PathVariable long id, Model model) {
-        model.addAttribute("post", postSvc.findOne(id));
+        Post post = postSvc.findOne(id);
+        model.addAttribute("post", post);
         return "posts/edit";
     }
 
-    @PostMapping("/posts/edit/{id}")
-    public String editPost(@ModelAttribute Post post) {
+    @PostMapping("/posts/edit/{edit}")
+    public String editPost(@ModelAttribute Post post){
         postSvc.save(post);
         return "redirect:/posts/" + post.getId();
     }
 
     @PostMapping("/post/delete")
-    public String deletePost(@ModelAttribute Post post) {
+    public String deletePost(@ModelAttribute Post post, Model model){
         postSvc.delete(post.getId());
-        return "redirect:/posts";
+        model.addAttribute("msg", "Your post was deleted correctly");
+        return "return the view with a success message";
     }
-
 }
