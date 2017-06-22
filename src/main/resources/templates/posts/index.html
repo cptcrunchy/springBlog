@@ -13,8 +13,12 @@
         <h2 th:text="*{title}"></h2>
         <p th:text="*{body}"></p>
         <a class="btn btn-primary" th:href="@{'/posts/edit/' + *{id} }">Edit</a>
-        <a class="btn btn-danger" th:href="@{'/posts/delete/' + *{id} }">Delete</a>
+        <a th:href="@{'/posts/delete/' + *{id} }" type="submit" class="btn btn-danger" >Delete</a>
+
     </div>
+
+
+
 </div>
 </body>
 </html>

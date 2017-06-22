@@ -1,32 +1,32 @@
 package com.codeup.controllers;
 
-import com.codeup.repositories.PostsRepository;
+import com.codeup.models.Post;
+import com.codeup.svcs.PostSvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import com.codeup.models.Post;
 import org.springframework.web.bind.annotation.*;
+
 
 @Controller
 public class PostsController {
-    private PostsRepository postsDao;
+
+    private final PostSvc postSvc;
 
     @Autowired
-    public PostsController(PostsRepository postsDao) { this.postsDao = postsDao;}
+    public PostsController(PostSvc postSvc) { this.postSvc = postSvc;}
 
     @GetMapping("/posts")
-    public String index(Model model) {
-        Iterable<Post> posts = postsDao.findAll();
-
+    public String viewAll(Model model) {
+        Iterable<Post> posts = postSvc.findAll();
         model.addAttribute("posts", posts);
         return "posts/index";
     }
 
     @GetMapping("/posts/{id}")
     public String show(@PathVariable long id, Model model) {
-        Post post = postsDao.findById(id);
+        Post post = postSvc.findOne(id);
         model.addAttribute("post", post);
-
         return "posts/show";
     }
 
@@ -38,21 +38,27 @@ public class PostsController {
 
     @PostMapping("/posts/create")
     public String savePost(@ModelAttribute Post post, Model model) {
-        postsDao.save(post);
+        postSvc.save(post);
         model.addAttribute("post", post);
-        return "redirect:/posts";
+        return "posts/create";
     }
 
     @GetMapping("/posts/edit/{id}")
-    public String editPost(@PathVariable long id, Model model) {
-        model.addAttribute("post", postsDao.findById(id));
+    public String showEditForm(@PathVariable long id, Model model) {
+        model.addAttribute("post", postSvc.findOne(id));
         return "posts/edit";
     }
 
     @PostMapping("/posts/edit/{id}")
-    public String showEditForm(@ModelAttribute Post post, Model model) {
-        model.addAttribute("post", postsDao.save(post));
-        return "posts/edit";
+    public String editPost(@ModelAttribute Post post) {
+        postSvc.save(post);
+        return "redirect:/posts/" + post.getId();
+    }
+
+    @PostMapping("/post/delete")
+    public String deletePost(@ModelAttribute Post post) {
+        postSvc.delete(post.getId());
+        return "redirect:/posts";
     }
 
 }

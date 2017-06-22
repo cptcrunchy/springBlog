@@ -1,40 +1,30 @@
 package com.codeup.svcs;
 
 import com.codeup.models.Post;
+import com.codeup.repositories.PostsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service("postSvc")
 public class PostSvc {
 
-    private List<Post> posts = new ArrayList<>();
+    private PostsRepository postsDao;
 
-    public PostSvc(){
-        createPosts();
+    @Autowired
+    public PostSvc(PostsRepository postsDao){
+        this.postsDao = postsDao;
     }
 
-    public List<Post> findAll(){
-        return posts;
+    public Iterable<Post> findAll(){
+        return postsDao.findAll();
     }
 
-    public Post save(Post post) {
-        post.setId(posts.size() + 1);
-        posts.add(post);
-        return post;
-    }
+    public Post findOne(long id) { return postsDao.findOne(id); }
 
-    public Post findOne(long id) {
-        return posts.get((int)(id - 1));
-    }
+    public Post save(Post post) { postsDao.save(post);return post; }
 
-    private void createPost(String title, String body) {
-        save(new Post(title, body));
-    }
+    public void delete(long id) { postsDao.delete(id); }
 
-    private void createPosts() {
-
-    }
 
 }
