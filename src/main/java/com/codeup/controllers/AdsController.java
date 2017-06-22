@@ -1,53 +1,62 @@
 package com.codeup.controllers;
 
 import com.codeup.models.Ad;
-import com.codeup.svcs.AdSvc;
+import com.codeup.repositories.AdsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
+
 
 @Controller
 public class AdsController {
-    private AdSvc adsDao;
-
-    @GetMapping("ads/create")
-    public String showCreateForm(Model model){
-        model.addAttribute("ad", new Ad());
-        return "ads/create";
-    }
-
-    @PostMapping("ads/create")
-    public String create(
-            @RequestParam(name="title") String title,
-            @RequestParam(name="description") String description,
-            Model model
-    )
-    {
-        Ad ad = new Ad(title,description);
-        ad.setTitle("title");
-        ad.setDescription("description");
-        return "ads/create";
-    }
+    private AdsRepository adsDao;
 
     @Autowired
-    public AdsController(AdSvc adsDao) {
+    public AdsController(AdsRepository adsDao) {
         this.adsDao = adsDao;
     }
 
     @GetMapping("/ads")
     public String index(Model model) {
-        List<Ad> ads = adsDao.findAll();
+
+        Iterable<Ad> ads = adsDao.findAll();
+
+        // Just a small test to find an Ad by it's title.
+        Ad ad = adsDao.findByTitle("test");
+        System.out.println(ad.getDescription());
+
+        // In order to search by title we can retrieve a list of ads that matches the title provided by the users input.
+//        List<Ad> ads = adsDao.findByTitleIsLike("%test%");
+
         model.addAttribute("ads", ads);
+
         return "ads/index";
     }
 
     @GetMapping("/ads/{id}")
-    @ResponseBody
-    public String show(@PathVariable long id) {
-        return "viewing ad #" + id;
+    public String show(@PathVariable long id, Model model) {
+        Optional<Ad> ad = adsDao.findById(id);
+        model.addAttribute("ad", ad);
+        return  "ads/show";
     }
 
+    @GetMapping("/ads/create")
+    public String showAdForm(Model model) {
+        model.addAttribute("ad", new Ad()); // We only need empty models on get requests
+        return "ads/create";
+    }
+
+    @PostMapping("/ads/create")
+    public String saveAd(
+            @RequestParam(name = "title") String title, // String title = request.getParameter("title")
+            @RequestParam(name = "description") String description,
+            Model model  // Model model = new Model();
+    ) {
+        Ad ad = new Ad(title, description);
+        model.addAttribute("ad", ad);
+        return "ads/create";
+    }
 }

@@ -35,12 +35,6 @@ public class PostSvc {
 
     private void createPosts() {
 
-        save(new Post("Help Wanted", "Position details"));
-        save(new Post("Help Wanted", "Position details"));
-        save(new Post("Help Wanted", "Position details"));
-        save(new Post("Help Wanted", "Position details"));
-        save(new Post("Help Wanted", "Position details"));
-
     }
 
 }

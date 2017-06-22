@@ -1,6 +1,6 @@
 package com.codeup.controllers;
 
-import com.codeup.svcs.PostSvc;
+import com.codeup.repositories.PostsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,11 +9,26 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class PostsController {
-    private final PostSvc postsDao;
+    private PostsRepository postsDao;
 
     @Autowired
-    public PostsController(PostSvc postsDao) { this.postsDao = postsDao;}
+    public PostsController(PostsRepository postsDao) { this.postsDao = postsDao;}
 
+    @GetMapping("/posts")
+    public String index(Model model) {
+        Iterable<Post> posts = postsDao.findAll();
+
+        model.addAttribute("posts", posts);
+        return "posts/index";
+    }
+
+    @GetMapping("/posts/{id}")
+    public String show(@PathVariable long id, Model model) {
+        Post post = postsDao.findById(id);
+        model.addAttribute("post", post);
+
+        return "posts/show";
+    }
 
     @GetMapping("/posts/create")
     public String showPostForm(Model model) {
@@ -28,26 +43,16 @@ public class PostsController {
         return "redirect:/posts";
     }
 
-
-
-    @GetMapping("/posts")
-    public String index(Model model) {
-        model.addAttribute("posts", postsDao.findAll());
-        return "posts/index";
-    }
-
-
-    @GetMapping("/posts/{id}")
-    public String show(@PathVariable long id, Model model) {
-        model.addAttribute("post", postsDao.findOne(id));
-        return "posts/show";
-    }
-
-    @GetMapping("/posts/{id}/edit")
+    @GetMapping("/posts/edit/{id}")
     public String editPost(@PathVariable long id, Model model) {
-        model.addAttribute("post", postsDao.findOne(id));
+        model.addAttribute("post", postsDao.findById(id));
         return "posts/edit";
     }
 
+    @PostMapping("/posts/edit/{id}")
+    public String showEditForm(@ModelAttribute Post post, Model model) {
+        model.addAttribute("post", postsDao.save(post));
+        return "posts/edit";
+    }
 
 }

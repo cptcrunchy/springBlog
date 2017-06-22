@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Individual Post</title>
+<head th:include="fragments :: head('This Post')">
+    <meta charset="UTF-8" />
+    <title>This Post</title>
 </head>
 <body>
-<h1>Individual Post</h1>
-<h2 th:text="${post.title}"></h2>
-<p th:text="${post.body}"></p>
+<nav th:replace="fragments :: my-navbar"></nav>
+<div class="container">
+    <h1>Individual Post</h1>
+    <h2 th:text="${post.title}"></h2>
+    <p th:text="${post.body}"></p>
+
+</div>
 </body>
 </html>

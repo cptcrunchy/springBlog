@@ -1,20 +1,20 @@
 package com.codeup.svcs;
 
-
 import com.codeup.models.Ad;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Service("adSvc")
 public class AdSvc {
+
     private List<Ad> ads;
 
     public AdSvc() {
         createAds();
     }
+
     public List<Ad> findAll() {
         return ads;
     }
@@ -26,13 +26,13 @@ public class AdSvc {
     }
 
     public Ad findOne(long id) {
-        return ads.get((int)(id - 1));
+        return ads.get((int) (id - 1));
     }
 
     private void createAds() {
         ads = new ArrayList<>();
-        save(new Ad("Free Beer", "$0"));
-        save(new Ad("xbox for sale", "$149 OBO"));
 
+        save(new Ad("playstation for sale", "$1000 OBO"));
+        save(new Ad("xbox for sale", "$1000 OBO"));
     }
 }

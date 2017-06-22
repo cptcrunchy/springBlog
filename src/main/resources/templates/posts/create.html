@@ -6,13 +6,15 @@
 </head>
 <body>
 <nav th:replace="fragments :: my-navbar"></nav>
-<form
-  action="/posts/create"
-  method="post"
-  th:object="${post}"
-  th:include="fragments :: form"
+    <div class="container">
+        <form
+          action="/posts/create"
+          method="post"
+          th:object="${post}"
+          th:include="fragments :: form"
 
->
-</form>
+        >
+        </form>
+    </div>
 </body>
 </html>
