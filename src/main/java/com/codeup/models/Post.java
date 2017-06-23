@@ -16,8 +16,9 @@ public class Post {
     @Column(nullable = false, columnDefinition = "Text")
     private String body;
 
-    @Column(nullable = false)
-    private long author_id;
+    @ManyToOne
+    @JoinColumn(name="owner_id")
+    private User user;
 
 
     public Post(String title, String body) {
@@ -44,11 +45,4 @@ public class Post {
         this.body = body;
     }
 
-    public long getAuthor_id() {
-        return author_id;
-    }
-
-    public void setAuthor_id(long author_id) {
-        this.author_id = author_id;
-    }
 }

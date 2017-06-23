@@ -1,6 +1,9 @@
 package com.codeup.models;
 
 import javax.persistence.*;
+import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "ads")
@@ -16,8 +19,19 @@ public class Ad {
     @Column(nullable = false, columnDefinition = "Text")
     private String description;
 
-    @Column(nullable = false)
-    private long author_id;
+    @OneToOne
+    private User owner;
+
+    @OneToMany( cascade = CascadeType.ALL, mappedBy = "ad")
+    private List<AdImage> images;
+
+    @ManyToMany(cascade = ALL)
+    @JoinTable(
+      name="ads_categories",
+      joinColumns = {@JoinColumn(name = "ad_id")},
+      inverseJoinColumns = {@JoinColumn(name = "category_id")}
+    )
+    private List<AdCategory> categories;
 
     public Ad(String title, String description) {
         this.title = title;
@@ -36,4 +50,11 @@ public class Ad {
 
     public String getDescription() {return description;}
     public void setDescription(String description) {this.description = description;}
+
+    public User getOwner() {return owner;}
+    public void setOwner(User owner) {this.owner = owner;}
+
+    public List<AdImage> getImages() {return images;}
+    public void setImages(List<AdImage> images) {this.images = images;}
+
 }

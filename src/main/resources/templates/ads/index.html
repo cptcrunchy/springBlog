@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments :: head('Ads Homepage')">
+    <meta charset="UTF-8" />
+    <title>Ads Homepage</title>
+</head>
+<body>
+<nav th:replace="fragments :: my-navbar"></nav>
+<h1>Ads Index Page</h1>
+<h2>Listing of all the ads</h2>
+
+<div th:each="ad : ${ads}">
+
+    <div th:each="image : ${ad.images}">
+        <img th:src="${image.path}" width="100px" height="100px" />
+    </div>
+
+    <h2>Title: <span th:text="${ad.title}"></span></h2>
+    <h2>Body: <span th:text="${ad.description}"></span></h2>
+    <h5>User: <span th:text="${ad.owner.username}"></span></h5>
+    <h5>Email: <span th:text="${ad.owner.email}"></span></h5>
+</div>
+</body>
+</html>
