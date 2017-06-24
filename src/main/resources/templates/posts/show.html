@@ -8,8 +8,9 @@
 <nav th:replace="fragments :: my-navbar"></nav>
 <div class="container">
     <h1>Individual Post</h1>
-    <h2 th:text="${post.title}"></h2>
-    <p th:text="${post.body}"></p>
+    <h2>Title: <span th:text="${post.title}"></span></h2>
+    <p>Body: <span th:text="${post.body}"></span></p>
+    <p>Email: <span th:text="${post.owner.email}"></span></p>
 
 </div>
 </body>

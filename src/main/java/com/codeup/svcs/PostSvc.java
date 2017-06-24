@@ -11,12 +11,13 @@ import org.springframework.stereotype.Service;
 public class PostSvc {
 
     private PostsRepository postsDao;
-    private UsersRepository usersDao;
+
+
 
     @Autowired
     public PostSvc(PostsRepository postsDao, UsersRepository usersDao){
         this.postsDao = postsDao;
-        this.usersDao = usersDao;
+
     }
 
     public Iterable<Post> findAll(){

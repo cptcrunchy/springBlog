@@ -12,11 +12,11 @@
     <div th:each="post : ${posts}" th:object="${post}">
         <h2 th:text="*{title}"></h2>
         <p th:text="*{body}"></p>
+        <p th:text="*{owner.username}"></p>
         <a class="btn btn-primary" th:href="@{'/posts/edit/' + *{id} }">Edit</a>
         <a th:href="@{'/posts/delete/' + *{id} }" type="submit" class="btn btn-danger" >Delete</a>
 
     </div>
-
 
 
 </div>

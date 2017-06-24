@@ -1,8 +1,11 @@
 package com.codeup.controllers;
 
 import com.codeup.models.Post;
+import com.codeup.models.User;
+import com.codeup.repositories.UsersRepository;
 import com.codeup.svcs.PostSvc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +15,13 @@ import org.springframework.web.bind.annotation.*;
 public class PostsController {
 
     private final PostSvc postSvc;
+    private final UsersRepository usersDao;
+
 
     @Autowired
-    public PostsController(PostSvc postSvc) {
+    public PostsController(PostSvc postSvc, UsersRepository usersDao) {
         this.postSvc = postSvc;
+        this.usersDao = usersDao;
     }
 
     @GetMapping("/posts")
@@ -39,7 +45,12 @@ public class PostsController {
     }
 
     @PostMapping("/posts/create")
-    public String savePost(@ModelAttribute Post post, Model model) {
+    public String savePost(
+            @RequestParam(name="title") String title,
+            @RequestParam(name="body") String body,
+            Model model) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Post post = new Post(title, body, user);
         postSvc.save(post);
         model.addAttribute("post", post);
         return "posts/create";
