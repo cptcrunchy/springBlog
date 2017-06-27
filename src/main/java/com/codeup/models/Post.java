@@ -1,6 +1,9 @@
 package com.codeup.models;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="posts")
@@ -11,9 +14,12 @@ public class Post {
     private long id;
 
     @Column(nullable = false, length = 100)
+    @NotBlank(message = "This field cannot be empty")
+    @Size(min = 5, message = "Titles must be at least 5 characters long")
     private String title;
 
     @Column(nullable = false, columnDefinition = "Text")
+    @NotBlank(message = "This field cannot be empty")
     private String body;
 
     @ManyToOne

@@ -8,12 +8,13 @@
 <nav th:replace="fragments :: my-navbar"></nav>
     <div class="container">
         <form
+          th:include="fragments :: adForm"
           th:action="@{/posts/create}"
           th:method="POST"
           th:object="${post}"
-          th:include="fragments :: form"
         >
         </form>
     </div>
+<div th:replace="fragments :: scripts"></div>
 </body>
 </html>

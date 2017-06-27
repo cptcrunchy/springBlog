@@ -5,10 +5,14 @@ import com.codeup.models.User;
 import com.codeup.repositories.UsersRepository;
 import com.codeup.svcs.PostSvc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 
 @Controller
@@ -26,7 +30,11 @@ public class PostsController {
 
     @GetMapping("/posts")
     public String viewAll(Model model) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        String name = auth.getName(); //get logged in username
         Iterable<Post> posts = postSvc.findAll();
+
+//        model.addAttribute("name", name);
         model.addAttribute("posts", posts);
         return "posts/index";
     }
@@ -46,14 +54,28 @@ public class PostsController {
 
     @PostMapping("/posts/create")
     public String savePost(
-            @RequestParam(name="title") String title,
-            @RequestParam(name="body") String body,
+            @Valid Post post,
+            Errors validation,
             Model model) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Post post = new Post(title, body, user);
-        postSvc.save(post);
+        if (post.getTitle().endsWith("?")) {
+            validation.rejectValue(
+            "title",
+            "post.title",
+            "Special characters not allowed in title"
+            );
+        }
+
+        if (validation.hasErrors()) {
+        model.addAttribute("errors", validation);
         model.addAttribute("post", post);
         return "posts/create";
+        }
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        post.setOwner(user);
+        postSvc.save(post);
+        model.addAttribute("post", post);
+        return "redirect:/posts";
     }
 
     @GetMapping("/posts/edit/{id}")

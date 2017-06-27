@@ -28,22 +28,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-
-                .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/posts") // user's home page, it can be any URL
-                .permitAll() // Anyone can go to the login page
-                .and()
-                .authorizeRequests()
-                .antMatchers("/", "/logout") // anyone can see the home and logout page
-                .permitAll()
-                .and()
-                .logout()
-                .logoutSuccessUrl("/login?logout") // append a query string value
-                .and()
-                .authorizeRequests()
-                .antMatchers("/posts/create", "/posts/?/edit") // only authenticated users can create ads
-                .hasAnyAuthority("ADMIN", "SELLER")
+        .formLogin()
+        .loginPage("/login")
+        .defaultSuccessUrl("/posts") // user's home page, it can be any URL
+        .permitAll() // Anyone can go to the login page
+        .and()
+        .authorizeRequests()
+        .antMatchers("/", "/logout") // anyone can see the home and logout page
+        .permitAll()
+        .and()
+        .logout()
+        .logoutSuccessUrl("/login?logout") // append a query string value
+        .and()
+        .authorizeRequests()
+        .antMatchers("/posts/create", "/posts/edit/?") // only authenticated users can create ads
+        .authenticated()
         ;
     }
 

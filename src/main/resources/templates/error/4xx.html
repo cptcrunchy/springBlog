@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlhs:th="http://www.thymeleaf.org"
+      xmlns:xmlhs="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/2005/Atom">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="'Ooops, ' + ${error}"></title>
+</head>
+<body>
+<th:block th:switch="${error}">
+    <div th:case="'Not Found'">
+        <h1>Page not found!!</h1>
+        <img src="/garbage-file.png" alt="Home Star Runner 404'd" />
+    </div>
+    <div th:case="'Forbidden'">
+        <h1>You don't have permission to view this page.</h1>
+    </div>
+</th:block>
+</body>
+</html>
