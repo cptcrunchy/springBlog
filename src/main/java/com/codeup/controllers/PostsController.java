@@ -36,8 +36,7 @@ public class PostsController {
     }
 
     @GetMapping("/posts.json")
-    public @ResponseBody
-    Iterable<Post> viewAllPosts() {
+    public @ResponseBody Iterable<Post> viewAllPosts() {
         return postSvc.findAll();
     }
 
@@ -71,7 +70,7 @@ public class PostsController {
     public String savePost(
             @Valid Post post,
             Errors validation,
-            @RequestParam(name="file") Multipartfile uploadedFile,
+            @RequestParam(name = "file") MultipartFile uploadedFile,
             Model model
     ) {
         if (post.getTitle().endsWith("?")) {
@@ -87,6 +86,7 @@ public class PostsController {
         model.addAttribute("post", post);
         return "posts/create";
         }
+
         String filename = uploadedFile.getOriginalFilename();
         String filepath = Paths.get(uploadPath, filename).toString();
         File destinationFile = new File(filepath);

@@ -48,18 +48,15 @@
         </span>
     </div>
     <div class="form-group">
-        <label for="description">Post Body</label>
-        <input type="text" name="description" id="description" class="form-control" th:field="*{body}" />
+        <label for="body">Post Body</label>
+        <input type="text" name="body" id="body" class="form-control" th:field="*{body}" />
         <span th:if="${#fields.hasErrors('body')}">
             <div th:replace="fragments :: validation-alert('body')" />
         </span>
     </div>
     <div class="form-group">
-        <label for="postFile">Post Image</label>
-        <input id="postFile" type="file" class="form-control" th:field="*{image}"/>
-        <span th:if="${#fields.hasErrors('image')}">
-            <div th:replace="fragments :: validation-alert('image')" />
-        </span>
+        <label for="file">Image</label>
+        <input type="file" class="form-control" name="file" id="file" />
     </div>
     <button class="btn btn-default">Save</button>
 </form>
@@ -67,25 +64,22 @@
 
 <form th:fragment="adForm">
     <div class="form-group">
-        <label for="adTitle">Title</label>
-        <input id="adTitle" type="text" class="form-control" th:field="*{title}"/>
+        <label for="title">Title</label>
+        <input id="title" type="text" class="form-control" th:field="*{title}"/>
         <span th:if="${#fields.hasErrors('title')}" >
             <div th:replace="fragments :: validation-alert('title')" />
         </span>
     </div>
     <div class="form-group">
-        <label for="body">Body</label>
-        <input id="body" type="textarea" class="form-control" th:field="*{body}"/>
+        <label for="description">Description</label>
+        <input id="description" class="form-control" th:field="*{description}"/>
         <span th:if="${#fields.hasErrors('body')}">
             <div th:replace="fragments :: validation-alert('body')" />
         </span>
     </div>
     <div class="form-group">
-        <label for="file">Ad Image</label>
-        <input id="file" type="file" class="form-control" th:field="*{image}"/>
-        <span th:if="${#fields.hasErrors('image')}">
-            <div th:replace="fragments :: validation-alert('image')" />
-        </span>
+        <label for="file">Image</label>
+        <input type="file" class="form-control" name="file" id="file" />
     </div>
     <button class="btn btn-default">Save</button>
 </form>
