@@ -3,8 +3,8 @@ package com.codeup.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name="ad_images")
-public class AdImage {
+@Table(name="post_images")
+public class PostImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,8 +14,8 @@ public class AdImage {
     private String path;
 
     @ManyToOne
-    @JoinColumn(name = "ad_id")
-    private Ad ad;
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     public long getId() {return id;}
     public void setId(long id) {this.id = id;}
@@ -23,9 +23,6 @@ public class AdImage {
     public String getPath() {return path;}
     public void setPath(String path) {this.path = path;}
 
-    public Ad getAd() {return ad;}
-    public void setAd(Ad ad) {this.ad = ad;}
-
+    public Post getPost() {return post;}
+    public void setPost(Post post) {this.post = post;}
 }
-
-

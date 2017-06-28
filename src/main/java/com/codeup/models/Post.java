@@ -1,9 +1,11 @@
 package com.codeup.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name="posts")
@@ -24,7 +26,15 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name="owner_id")
+    @JsonManagedReference
     private User owner;
+
+    @OneToMany( cascade = CascadeType.ALL, mappedBy = "post")
+    private List<PostImage> postImages;
+
+    @Column(nullable = true)
+    private String imageURL;
+
 
 
     public Post(String title, String body, User owner) {
@@ -54,4 +64,10 @@ public class Post {
 
     public User getOwner() {return owner;}
     public void setOwner(User owner) {this.owner = owner;}
+
+    public List<PostImage> getPostImages() {return postImages;}
+    public void setPostImages(List<PostImage> postImages) {this.postImages = postImages;}
+
+    public String getImageURL() {return imageURL;}
+    public void setImageURL(String imageURL) {this.imageURL = imageURL;}
 }

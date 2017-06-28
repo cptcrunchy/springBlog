@@ -1,18 +1,23 @@
 package com.codeup.controllers;
 
+
 import com.codeup.models.Post;
 import com.codeup.models.User;
 import com.codeup.repositories.UsersRepository;
 import com.codeup.svcs.PostSvc;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 
 @Controller
@@ -21,6 +26,8 @@ public class PostsController {
     private final PostSvc postSvc;
     private final UsersRepository usersDao;
 
+    @Value("${file-upload-path}")
+    private String uploadPath;
 
     @Autowired
     public PostsController(PostSvc postSvc, UsersRepository usersDao) {
@@ -28,13 +35,21 @@ public class PostsController {
         this.usersDao = usersDao;
     }
 
-    @GetMapping("/posts")
-    public String viewAll(Model model) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        String name = auth.getName(); //get logged in username
-        Iterable<Post> posts = postSvc.findAll();
+    @GetMapping("/posts.json")
+    public @ResponseBody
+    Iterable<Post> viewAllPosts() {
+        return postSvc.findAll();
+    }
 
-//        model.addAttribute("name", name);
+    @GetMapping("/posts/ajax")
+    public String viewAllPostsAjax(){
+        return "posts/ajax";
+    }
+
+    @GetMapping("/posts")
+    public String index(Model model) {
+
+        Iterable<Post> posts = postSvc.findAll();
         model.addAttribute("posts", posts);
         return "posts/index";
     }
@@ -56,7 +71,9 @@ public class PostsController {
     public String savePost(
             @Valid Post post,
             Errors validation,
-            Model model) {
+            @RequestParam(name="file") Multipartfile uploadedFile,
+            Model model
+    ) {
         if (post.getTitle().endsWith("?")) {
             validation.rejectValue(
             "title",
@@ -69,6 +86,17 @@ public class PostsController {
         model.addAttribute("errors", validation);
         model.addAttribute("post", post);
         return "posts/create";
+        }
+        String filename = uploadedFile.getOriginalFilename();
+        String filepath = Paths.get(uploadPath, filename).toString();
+        File destinationFile = new File(filepath);
+
+        try {
+            uploadedFile.transferTo(destinationFile);
+//            model.addAttribute("message", "File successfully uploaded!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("message", "Oops! Something went wrong! " + e);
         }
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

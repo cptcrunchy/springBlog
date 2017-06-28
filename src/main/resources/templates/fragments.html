@@ -39,7 +39,7 @@
 </nav>
 
 
-<form th:fragment="form">
+<form th:fragment="postForm">
     <div class="form-group">
         <label for="title">Post Title</label>
         <input type="text" name="title" id="title" class="form-control" th:field="*{title}" />
@@ -54,23 +54,37 @@
             <div th:replace="fragments :: validation-alert('body')" />
         </span>
     </div>
+    <div class="form-group">
+        <label for="postFile">Post Image</label>
+        <input id="postFile" type="file" class="form-control" th:field="*{image}"/>
+        <span th:if="${#fields.hasErrors('image')}">
+            <div th:replace="fragments :: validation-alert('image')" />
+        </span>
+    </div>
     <button class="btn btn-default">Save</button>
 </form>
 
 
 <form th:fragment="adForm">
     <div class="form-group">
-        <label for="title">Title</label>
-        <input id="title" class="form-control" th:field="*{title}"/>
+        <label for="adTitle">Title</label>
+        <input id="adTitle" type="text" class="form-control" th:field="*{title}"/>
         <span th:if="${#fields.hasErrors('title')}" >
             <div th:replace="fragments :: validation-alert('title')" />
         </span>
     </div>
     <div class="form-group">
         <label for="body">Body</label>
-        <input id="body" class="form-control" th:field="*{body}"/>
+        <input id="body" type="textarea" class="form-control" th:field="*{body}"/>
         <span th:if="${#fields.hasErrors('body')}">
             <div th:replace="fragments :: validation-alert('body')" />
+        </span>
+    </div>
+    <div class="form-group">
+        <label for="file">Ad Image</label>
+        <input id="file" type="file" class="form-control" th:field="*{image}"/>
+        <span th:if="${#fields.hasErrors('image')}">
+            <div th:replace="fragments :: validation-alert('image')" />
         </span>
     </div>
     <button class="btn btn-default">Save</button>

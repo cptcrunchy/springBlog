@@ -1,12 +1,16 @@
 package com.codeup.controllers;
 
 import com.codeup.models.Ad;
+import com.codeup.models.User;
 import com.codeup.repositories.AdsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 
@@ -23,13 +27,6 @@ public class AdsController {
     public String index(Model model) {
 
         Iterable<Ad> ads = adsDao.findAll();
-
-        // Just a small test to find an Ad by it's title.
-        Ad ad = adsDao.findByTitle("test");
-        System.out.println(ad.getDescription());
-
-        // In order to search by title we can retrieve a list of ads that matches the title provided by the users input.
-//        List<Ad> ads = adsDao.findByTitleIsLike("%test%");
 
         model.addAttribute("ads", ads);
 
@@ -51,12 +48,29 @@ public class AdsController {
 
     @PostMapping("/ads/create")
     public String saveAd(
-            @RequestParam(name = "title") String title, // String title = request.getParameter("title")
-            @RequestParam(name = "description") String description,
+            @Valid Ad ad,
+            Errors validation,
             Model model  // Model model = new Model();
     ) {
-        Ad ad = new Ad(title, description);
+        // if (!passwordConfirm.equals(password)) { /* reject value */ }
+        if (ad.getTitle().endsWith("?")) {
+            validation.rejectValue(
+                    "title",
+                    "ad.title",
+                    "You can't be unsure about your title!"
+            );
+        }
+
+        if (validation.hasErrors()) {
+            model.addAttribute("errors", validation);
+            model.addAttribute("ad", ad);
+            return "ads/create";
+        }
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ad.setOwner(user);
+        adsDao.save(ad);
         model.addAttribute("ad", ad);
-        return "ads/create";
+        return "redirect:/ads";
     }
 }

@@ -25,6 +25,9 @@ public class Ad {
     @OneToMany( cascade = CascadeType.ALL, mappedBy = "ad")
     private List<AdImage> images;
 
+    @Column(nullable = true)
+    private String imageURL;
+
     @ManyToMany(cascade = ALL)
     @JoinTable(
       name="ads_categories",
@@ -57,4 +60,6 @@ public class Ad {
     public List<AdImage> getImages() {return images;}
     public void setImages(List<AdImage> images) {this.images = images;}
 
+    public String getImageURL() {return imageURL;}
+    public void setImageURL(String imageURL) {this.imageURL = imageURL;}
 }
