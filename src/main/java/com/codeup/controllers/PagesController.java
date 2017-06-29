@@ -14,6 +14,9 @@ public class PagesController {
         return "resume";
     }
 
+    @GetMapping("/")
+    public String index() { return "posts/index"; }
+
     @GetMapping("/portfolio")
     public String portfolio() {
         return "portfolio";
